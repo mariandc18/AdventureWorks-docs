@@ -10,10 +10,14 @@ En este proyecto, los estudiantes construirán una solución de **Inteligencia d
 - [**Tarea #2 - Almacén de datos**](#tarea-2---almacén-de-datos)
 - [**Tarea #3 - Panel de control**](#tarea-3---panel-de-control)
 
-El trabajo debe realizarse en grupos de dos (2) estudiantes.
+El trabajo debe realizarse de forma individual
 
-- **Fecha de publicación:** 10 de septiembre de 2025
-- **Fecha de entrega:** 15 de diciembre de 2025
+- **Fecha de publicación:** 15 de septiembre de 2025
+- **Fecha de entregas parciales**:
+  - Tarea #1: 13 de octubre de 2025
+  - Tarea #2: 1 de diciembre de 2025
+
+- **Fecha de entrega final:** 15 de diciembre de 2025
 
 La documentación del proyecto puede consultarse [aquí](./aw-docs/doc.md).
 
@@ -23,7 +27,7 @@ La documentación del proyecto puede consultarse [aquí](./aw-docs/doc.md).
 
 AdventureWorks genera sus ingresos principalmente a través de la venta de bicicletas y accesorios relacionados. Sus clientes pueden ser personas que compran productos para uso personal o tiendas minoristas que adquieren productos al por mayor para revenderlos a sus propios clientes. Cada orden de venta se registra y rastrea cuidadosamente a nivel de artículo, lo que permite una gestión precisa del inventario y el rendimiento de las ventas. Algunas órdenes son gestionadas directamente por representantes de ventas, quienes desempeñan un papel fundamental en la generación de ingresos. Estos empleados reciben una comisión por las ventas que consiguen y pueden obtener bonificaciones adicionales cuando cumplen o superan sus cuotas de ventas asignadas. AdventureWorks también ofrece servicios de envío para entregar sus productos en todo el mundo. Estos costos de envío son asumidos por el cliente, y la empresa soporta múltiples métodos de envío para adaptarse a la logística internacional y a las diversas necesidades de los clientes.
 
-El proceso de fabricación de la compañía está respaldado por una cadena de suministro integral. Para producir bicicletas y accesorios, AdventureWorks compra materias primas a diversos proveedores. Estos materiales se almacenan en almacenes y se procesan en diferentes instalaciones de la cadena de producción. Ciertos empleados se encargan de negociar con los proveedores, gestionar órdenes de compra y garantizar un flujo constante de materias primas hacia las operaciones de la empresa. Toda la información sobre proveedores y el historial de compras se registra para respaldar la planificación, el control de calidad y los procesos de auditoría. La gestión de inventario juega un papel esencial para asegurar que tanto las materias primas utilizadas como los productos terminados se rastreen con precisión a lo largo de la cadena de producción. Para cada producto fabricado, AdventureWorks mantiene una lista detallada de materiales, que especifica todos los componentes y subcomponentes necesarios para su ensamblaje. Cuando un producto se programa para su producción, se emite una orden de trabajo y el artículo avanza por las distintas etapas de la línea de ensamblaje hasta completarse y quedar listo para la venta. Este sistema garantiza eficiencia, trazabilidad y calidad en los productos.
+El proceso de fabricación de la compañía está respaldado por una cadena de suministro integral. Para producir bicicletas y accesorios, AdventureWorks compra materias primas a diversos proveedores. Estos materiales se conservan en almacenes y se procesan en diferentes instalaciones de la cadena de producción. Ciertos empleados se encargan de negociar con los proveedores, gestionar órdenes de compra y garantizar un flujo constante de materias primas hacia las operaciones de la empresa. Toda la información sobre proveedores y el historial de compras se registra para respaldar la planificación, el control de calidad y los procesos de auditoría. La gestión de inventario juega un papel esencial para asegurar que tanto las materias primas utilizadas como los productos terminados se rastreen con precisión a lo largo de la cadena de producción. Para cada producto fabricado, AdventureWorks mantiene una lista detallada de materiales, que especifica todos los componentes y subcomponentes necesarios para su ensamblaje. Cuando un producto se programa para su producción, se emite una orden de trabajo y el artículo avanza por las distintas etapas de la línea de ensamblaje hasta completarse y quedar listo para la venta. Este sistema garantiza eficiencia, trazabilidad y calidad en los productos.
 
 Además de sus operaciones de ventas y manufactura, AdventureWorks cuenta con un departamento de Recursos Humanos (RRHH) que gestiona la fuerza laboral de la empresa. Este departamento es responsable de mantener registros detallados de los empleados, administrar la nómina, supervisar las asignaciones departamentales y gestionar la estructura organizacional. También se encarga de llevar el control de las comisiones y bonificaciones de los representantes de ventas, así como de apoyar los procesos de reclutamiento e incorporación de nuevos empleados.
 
@@ -40,8 +44,8 @@ La empresa tiene como objetivo primario **aumentar los márgenes de ganancia**. 
    - **Incrementar la participación en el mercado:** Ampliar la presencia de la empresa en los mercados existentes o ingresar a nuevos mercados para atraer a más clientes.
    - **Ajuste de precios:** Elevar cuidadosamente los precios de los productos para impulsar el crecimiento de los ingresos, monitoreando la respuesta de los clientes para evitar impactos negativos en la demanda.
 2. **Reducir los costos**
-   Reducir gastos innecesarios y mejorar la eficiencia operativa ayudará a maximizar los márgenes. Entre los enfoques :
-   - **Optimización de la cadena de suministro:** Mejorar la relación con los proveedores, reducir los costos de materiales y optimizar la gestión de inventarios.
+   Reducir gastos innecesarios y mejorar la eficiencia operativa ayudará a maximizar los márgenes. Entre los enfoques a aplicar se encuentran:
+   - **Optimización de la cadena de suministros:** Mejorar la relación con los proveedores, reducir los costos de materiales y optimizar la gestión de inventarios.
    - **Optimización de la línea de ensamblaje:** Perfeccionar los procesos de producción para disminuir el desperdicio de materias primas, mejorar la calidad y aumentar la capacidad productiva.
    - **Reestructuración de la nómina:** Evaluar la estructura de personal y los planes de compensación para asegurar que los recursos se asignen de manera eficiente y estén alineados con las necesidades del negocio.
 
@@ -85,13 +89,15 @@ Este panel centralizado ofrecerá visibilidad en tiempo real de los principales 
 
 ## Evaluación
 
-Para la evaluación, cada equipo deberá seleccionar dos (2) decisiones de la sección [Estrategia del negocio](#Estrategia del negocio) y proporcionar una solución de inteligencia de negocios que permitan a los usuarios respaldar el proceso de toma de dichas decisiones utilizando los datos disponibles en la organización. Además como parte de su solución se debe incluir el panel de control general descrito en la sección [Monitoreo del negocio](#Monitoreo del negocio).
+Para la evaluación, cada estudiante deberá seleccionar dos (2) decisiones de la sección [Estrategia del negocio](#Estrategia del negocio) y proporcionar una solución de inteligencia de negocios que permita a los usuarios respaldar el proceso de toma de dichas decisiones utilizando los datos disponibles en la organización. Además, como parte de su solución se debe incluir el panel de control general descrito en la sección [Monitoreo del negocio](#Monitoreo del negocio).
 
-Para completar la solución de inteligencia de negocios, se deben realizar cada una de las tres tareas del proyecto, y la calificación final será el promedio de las calificaciones obtenidas en cada tarea.
+Para completar la solución de inteligencia de negocios, se deben realizar cada una de las tres tareas del proyecto, y la calificación del proyecto se definirá de acuerdo a las notas obtenidas en cada tarea y la actitud del estudiante durante la realización del proyecto.
 
 A continuación, se detallan los requerimientos para la entrega de cada tarea:
 
 ### Tarea #1 - Diseño y documentación
+
+**Fecha de entrega**: 13 de octubre de 2025
 
 En esta tarea los estudiantes deben de dejar documentado el proceso de diseño de su solución de inteligencia de negocios. Dicha documentación deberá encontrarse en el directorio `aw-docs` será dividida en tres secciones principales: 
 
@@ -108,7 +114,7 @@ Dentro del directorio `aw-docs\data-sources`, se debe preparar un documento para
 
 #### Requerimientos del negocio
 
-Dentro del directorio `aw-docs\requirements`, se debe prepara un documento que especifique las metas de la empresa y modele los requerimientos informacionales para la solución de inteligencia de negocios a partir de las mismas. 
+Dentro del directorio `aw-docs\requirements`, se debe preparar un documento que especifique  las metas de la empresa, a partir de las cuales se modelen los requerimientos informacionales para la solución de inteligencia de negocios a desarrollar.
 
 Este documento debe estar estructurado de la siguiente forma:
 
@@ -125,7 +131,7 @@ Además, para cada decisión identificada en el modelo, se debe elaborar un docu
 
 #### Diseño de arquitectura
 
-Dentro del directorio `aw-docs/architecture` , esta documento debe recoger las especificaciones conceptuales y técnicas para la implementación de la solución de inteligencia de negocios
+Dentro del directorio `aw-docs/architecture` , este documento debe recoger las especificaciones conceptuales y técnicas para la implementación de la solución de inteligencia de negocios.
 
 - **Resumen:** Una visión general de la arquitectura y su papel en el soporte a los objetivos de IN de la empresa.
 - **Arquitectura conceptual:** Un diagrama conceptual que muestre el flujo de datos desde las fuentes hasta el data warehouse y, finalmente, los usuarios finales.
@@ -135,6 +141,8 @@ Dentro del directorio `aw-docs/architecture` , esta documento debe recoger las e
 
 ### Tarea #2 - Almacén de datos
 
+**Fecha de entrega**: 1 de diciembre de 2025
+
 En esta tarea se debe implementar un almacén de datos siguiendo las especificaciones definidas en la sección [Diseño de arquitectura](#diseño-de-arquitectura) de la documentación.
 
 Es importante asegurarse de seguir las convenciones y buenas prácticas aprendidas durante las clases prácticas.
@@ -142,6 +150,8 @@ Es importante asegurarse de seguir las convenciones y buenas prácticas aprendid
 El código debe estar en el directorio `aw-dwh`.
 
 ### Tarea #3 - Panel de control
+
+**Fecha de entrega**: 15 de diciembre de 2025
 
 En esta tarea se deben implementar los paneles de control que soportarán la toma de las deicisiones definidas en la sección [Requerimientos del negocio](#requerimientos-del-negocio) de la documentación.
 
