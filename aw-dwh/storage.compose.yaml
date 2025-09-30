@@ -5,19 +5,19 @@ services:
   postgres:
     image: citusdata/citus:postgres_15
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: adventureworks
     networks:
       - dwh_network
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:5432
   
 
   minio:
     image: minio/minio
     ports:
-      - "${MINIO_ADMIN_PORT}:9000"
+      - "${MINIO_ADMIN_PORT}:9001"
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
