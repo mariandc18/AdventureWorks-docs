@@ -1,0 +1,2 @@
+ASSET_GROUP_LANDING = "landing"
+ASSET_GROUP_LABS = "labs"
