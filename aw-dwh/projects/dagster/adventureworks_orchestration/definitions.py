@@ -31,9 +31,12 @@ def defs():
         resources={
             
             "spark_s3_rsc" : configured_pyspark,
+            
             "s3_test_io_manager": S3PartitionedCsvIOManager(
                 pyspark=configured_pyspark,
                 s3_bucket="test"
-            )
+            ),
+            
+            # register the AdventureWorks MySQL resource here
         },
     )
