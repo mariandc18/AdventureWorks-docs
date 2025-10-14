@@ -2,20 +2,42 @@
 
 ## Resumen
 
-Una breve descripción de la fuente de datos, incluyendo su origen, propósito y el tipo de datos que contiene.
+La API que gestiona reseñas de productos realizadas por usuarios en tiendas específicas. Está compuesta por tres entidades principales: Review, User y Store. Cada reseña incluye información sobre el producto evaluado, la calificación otorgada, la fecha de la reseña y referencias al usuario y a la tienda correspondiente.
 
 ## Modelo conceptual
 
-Una representación conceptual de la fuente de datos utilizando Modelo Entidad Relacionalidad Extendido (MERX) que muestre las entidades, interrelaciones y atributos.
+![Modelo conceptual de API](./imgs/API.drawio.png)
 
 ## Modelo lógico
 
-La representación lógico del modelo de datos
+![Modelo lógico de API](./imgs/API_model.drawio.png)
 
 ## Catálogo de datos
 
-Una descripción completa de cada tabla dentro de la fuente de datos. Este catálogo debe incluir:
+### Review
 
-- Nombre y propósito de la tabla.
+| Campo     | Tipo de dato   | Restricciones | Clave | Descripción                                      |
+|-----------|----------------|----------------|--------|--------------------------------------------------|
+| id        | INT            | NOT NULL       | PK     | Identificador único de la reseña                |
+| userId    | INT            | NOT NULL       | FK     | Referencia al usuario que escribió la reseña    |
+| storeId   | INT            | NOT NULL       | FK     | Referencia a la tienda asociada a la reseña     |
+| product   | VARCHAR        | NOT NULL       | —      | Nombre del producto reseñado                    |
+| rating    | INT            | NOT NULL       | —      | Calificación
+| date      | DATE           | NOT NULL       | —      | Fecha en que se realizó la reseña               |
 
-- Lista de campos, incluyendo nombre, tipo de dato, restricciones y descripción de negocio.
+### User
+
+| Campo      | Tipo de dato   | Restricciones | Clave | Descripción                                      |
+|------------|----------------|----------------|--------|--------------------------------------------------|
+| id         | INT            | NOT NULL       | PK     | Identificador único del usuario                 |
+| firstName  | VARCHAR        | NOT NULL       | —      | Nombre del usuario                              |
+| lastName   | VARCHAR        | NOT NULL       | —      | Apellido del usuario                            |
+| email      | VARCHAR        | NOT NULL, UNIQUE | —    | Correo electrónico del usuario                  |
+| birthdate  | DATE           | NOT NULL       | —      | Fecha de nacimiento del usuario                 |
+
+### Store
+
+| Campo | Tipo de dato   | Restricciones | Clave | Descripción                      |
+|-------|----------------|----------------|--------|----------------------------------|
+| id    | INT            | NOT NULL       | PK     | Identificador único de la tienda|
+| name  | VARCHAR        | NOT NULL       | —      | Nombre de la tienda              |
