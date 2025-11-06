@@ -1,0 +1,34 @@
+version: 2
+
+sources:
+  - name: bronze
+    schema: bronze
+    tables:
+      - name: core_addresstype
+        description: "List of address type classifications."
+        columns:
+          - name: addresstypeid
+            description: "Primary key for AddressType records."
+            tests: [not_null, unique]
+          - name: name
+            description: "Name of the address type."
+            tests: [not_null]
+          - name: rowguid
+            description: "Unique identifier for the address type."
+            tests: [not_null, unique]
+          - name: modifieddate
+            description: "Date and time the record was last modified."
+            tests: [not_null]
+
+      - name: core_businessentity
+        description: "Master table for all entities such as customers, vendors, or employees."
+        columns:
+          - name: businessentityid
+            description: "Primary key for BusinessEntity records."
+            tests: [not_null, unique]
+          - name: rowguid
+            description: "Unique identifier for the entity."
+            tests: [not_null, unique]
+          - name: modifieddate
+            description: "Date and time the record was last modified."
+            tests: [not_null]

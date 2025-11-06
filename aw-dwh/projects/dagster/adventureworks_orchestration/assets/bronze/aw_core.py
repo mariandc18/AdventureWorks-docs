@@ -23,7 +23,19 @@ aw_core_tables = [
 ]
 
 def get_bronze_aw_core_table_asset(table: str):
-   raise NotImplementedError()
+    @dg.asset(
+        ins={
+            "source" : dg.AssetIn(key=[ASSET_GROUP_LANDING, AW_CORE_PREFIX, table.lower()]) 
+        },
+        io_manager_key="s3_iceberg_io_manager",
+        deps=[clean_bronze_layer],
+        key=[ASSET_GROUP_BRONZE, f"core_{table.lower()}"],
+        group_name=ASSET_GROUP_BRONZE,
+    )
+    def _asset(context: dg.AssetExecutionContext, source: DataFrame):
+        return dg.Output(value=source)
+
+    return _asset
 
 def get_bronze_aw_core_assets():
     return [get_bronze_aw_core_table_asset(table) for table in aw_core_tables]

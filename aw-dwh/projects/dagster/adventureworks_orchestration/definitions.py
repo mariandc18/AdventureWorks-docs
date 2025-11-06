@@ -2,11 +2,14 @@ import dagster as dg
 from .assets import sample
 from .assets import landing
 from .assets import bronze
+from .assets import silver
 from dagster_pyspark import pyspark_resource
 from .resources.mysql_resource import PySparkMySQLResource
 from .resources.csv_io_manager import S3PartitionedCsvIOManager
 from .resources.iceberg_io_manager import IcebergIOManager
 from dagster_aws.s3 import S3Resource
+from dagster_dbt import DbtCliResource
+from .project import dbt_silver_project
 import os
 from .jobs import jobs, schedules
 
@@ -16,6 +19,7 @@ def defs():
     sample_assets = dg.load_assets_from_package_module(sample)
     landing_assets = dg.load_assets_from_package_module(landing)
     bronze_assets = dg.load_assets_from_package_module(bronze)
+    silver_assets = dg.load_assets_from_package_module(silver)
 
     configured_pyspark = pyspark_resource.configured(
         {
@@ -31,8 +35,15 @@ def defs():
 
 
 
+    dbt_silver_resource = DbtCliResource(
+        project_dir=dbt_silver_project,
+        target="dev",
+    )
+
+
+
     return dg.Definitions(
-        assets=[*sample_assets, *landing_assets, *bronze_assets],
+        assets=[*sample_assets, *landing_assets, *bronze_assets, *silver_assets],
         jobs=jobs,
         schedules=schedules,
         resources={
@@ -71,7 +82,8 @@ def defs():
                 user=dg.EnvVar("AW_CORE_USER"),
                 password=dg.EnvVar("AW_CORE_PASSWORD")
             ),
+
+             "dbt_silver_rsc": dbt_silver_resource
             
-            # register the AdventureWorks MySQL resource here
         },
     )

@@ -25,5 +25,11 @@ bronze_job =  dg.define_asset_job(
     executor_def=dg.multiprocess_executor.configured({"max_concurrent": 1}),
 )
 
-jobs = [sample_job, landing_job, bronze_job]
+silver_job =  dg.define_asset_job(
+    "silver_assets_job",
+    selection=dg.AssetSelection.groups(ASSET_GROUP_SILVER),
+    executor_def=dg.multiprocess_executor.configured({"max_concurrent": 2}),
+)
+
+jobs = [sample_job, landing_job, bronze_job, silver_job]
 schedules= [five_minutes_schedule]

@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: addresstype
+    description: "List of address type classifications."
+    columns:
+      - name: addresstypeid
+        description: "Primary key for AddressType records."
+        tests: [not_null]
+      - name: name
+        description: "Name of the address type."
+        tests: [not_null]
+
+  - name: businessentity
+    description: "Master table for all entities such as customers, vendors, or employees."
+    columns:
+      - name: businessentityid
+        description: "Primary key for BusinessEntity records."
+        tests: [not_null, unique]
+
