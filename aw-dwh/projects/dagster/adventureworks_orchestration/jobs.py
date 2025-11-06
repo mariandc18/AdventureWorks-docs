@@ -12,5 +12,18 @@ five_minutes_schedule = dg.ScheduleDefinition(
     cron_schedule="*/5 * * * *",
 )
 
-jobs = [sample_job]
+landing_job =  dg.define_asset_job(
+    "landing_assets_job",
+    selection=dg.AssetSelection.groups(ASSET_GROUP_LANDING),
+    executor_def=dg.multiprocess_executor.configured({"max_concurrent": 2}),
+)
+
+
+bronze_job =  dg.define_asset_job(
+    "bronze_assets_job",
+    selection=dg.AssetSelection.groups(ASSET_GROUP_BRONZE),
+    executor_def=dg.multiprocess_executor.configured({"max_concurrent": 1}),
+)
+
+jobs = [sample_job, landing_job, bronze_job]
 schedules= [five_minutes_schedule]

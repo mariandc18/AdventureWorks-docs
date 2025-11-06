@@ -1,7 +1,12 @@
 import dagster as dg
 from .assets import sample
+from .assets import landing
+from .assets import bronze
 from dagster_pyspark import pyspark_resource
+from .resources.mysql_resource import PySparkMySQLResource
 from .resources.csv_io_manager import S3PartitionedCsvIOManager
+from .resources.iceberg_io_manager import IcebergIOManager
+from dagster_aws.s3 import S3Resource
 import os
 from .jobs import jobs, schedules
 
@@ -9,6 +14,8 @@ from .jobs import jobs, schedules
 @dg.definitions
 def defs():
     sample_assets = dg.load_assets_from_package_module(sample)
+    landing_assets = dg.load_assets_from_package_module(landing)
+    bronze_assets = dg.load_assets_from_package_module(bronze)
 
     configured_pyspark = pyspark_resource.configured(
         {
@@ -25,7 +32,7 @@ def defs():
 
 
     return dg.Definitions(
-        assets=[*sample_assets],
+        assets=[*sample_assets, *landing_assets, *bronze_assets],
         jobs=jobs,
         schedules=schedules,
         resources={
@@ -35,6 +42,34 @@ def defs():
             "s3_test_io_manager": S3PartitionedCsvIOManager(
                 pyspark=configured_pyspark,
                 s3_bucket="test"
+            ),
+
+            "s3_csv_lake_io_manager": S3PartitionedCsvIOManager(
+                pyspark=configured_pyspark,
+                s3_bucket="lake"
+            ),  
+
+
+            "s3_iceberg_io_manager": IcebergIOManager(
+                pyspark=configured_pyspark,
+                catalog="iceberg"
+            ),
+
+            "s3_rsc": S3Resource(
+                aws_access_key_id=dg.EnvVar("AWS_ACCESS_KEY_ID"),
+                aws_secret_access_key=dg.EnvVar("AWS_SECRET_ACCESS_KEY"),
+                endpoint_url=dg.EnvVar("AWS_ENDPOINT"),
+                region_name=dg.EnvVar("AWS_REGION")
+            ),
+
+
+            "aw_core_mysql_rsc": PySparkMySQLResource(
+                pyspark=configured_pyspark,
+                host=dg.EnvVar("AW_CORE_HOST"),
+                port=dg.EnvVar("AW_CORE_PORT"),
+                database=dg.EnvVar("AW_CORE_DATABASE"),
+                user=dg.EnvVar("AW_CORE_USER"),
+                password=dg.EnvVar("AW_CORE_PASSWORD")
             ),
             
             # register the AdventureWorks MySQL resource here
