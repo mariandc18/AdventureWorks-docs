@@ -3,13 +3,14 @@ from .assets import sample
 from .assets import landing
 from .assets import bronze
 from .assets import silver
+from .assets import gold
 from dagster_pyspark import pyspark_resource
-from .resources.mysql_resource import PySparkMySQLResource
 from .resources.csv_io_manager import S3PartitionedCsvIOManager
 from .resources.iceberg_io_manager import IcebergIOManager
-from dagster_aws.s3 import S3Resource
+from .resources.mysql_resource import PySparkMySQLResource
 from dagster_dbt import DbtCliResource
-from .project import dbt_silver_project
+from .project import dbt_silver_project, dbt_gold_project
+from dagster_aws.s3 import S3Resource
 import os
 from .jobs import jobs, schedules
 
@@ -20,6 +21,7 @@ def defs():
     landing_assets = dg.load_assets_from_package_module(landing)
     bronze_assets = dg.load_assets_from_package_module(bronze)
     silver_assets = dg.load_assets_from_package_module(silver)
+    gold_assets = dg.load_assets_from_package_module(gold)
 
     configured_pyspark = pyspark_resource.configured(
         {
@@ -33,17 +35,20 @@ def defs():
         }
     )
 
-
-
     dbt_silver_resource = DbtCliResource(
         project_dir=dbt_silver_project,
         target="dev",
     )
 
+    dbt_gold_resource = DbtCliResource(
+        project_dir=dbt_gold_project,
+        target="dev"
+    )
+
 
 
     return dg.Definitions(
-        assets=[*sample_assets, *landing_assets, *bronze_assets, *silver_assets],
+        assets=[*sample_assets, *landing_assets, *bronze_assets, *silver_assets, *gold_assets],
         jobs=jobs,
         schedules=schedules,
         resources={
@@ -60,19 +65,10 @@ def defs():
                 s3_bucket="lake"
             ),  
 
-
             "s3_iceberg_io_manager": IcebergIOManager(
                 pyspark=configured_pyspark,
                 catalog="iceberg"
             ),
-
-            "s3_rsc": S3Resource(
-                aws_access_key_id=dg.EnvVar("AWS_ACCESS_KEY_ID"),
-                aws_secret_access_key=dg.EnvVar("AWS_SECRET_ACCESS_KEY"),
-                endpoint_url=dg.EnvVar("AWS_ENDPOINT"),
-                region_name=dg.EnvVar("AWS_REGION")
-            ),
-
 
             "aw_core_mysql_rsc": PySparkMySQLResource(
                 pyspark=configured_pyspark,
@@ -83,7 +79,16 @@ def defs():
                 password=dg.EnvVar("AW_CORE_PASSWORD")
             ),
 
-             "dbt_silver_rsc": dbt_silver_resource
-            
+            "s3_rsc": S3Resource(
+                aws_access_key_id=dg.EnvVar("AWS_ACCESS_KEY_ID"),
+                aws_secret_access_key=dg.EnvVar("AWS_SECRET_ACCESS_KEY"),
+                endpoint_url=dg.EnvVar("AWS_ENDPOINT"),
+                region_name=dg.EnvVar("AWS_REGION")
+            ),
+
+            "dbt_silver_rsc": dbt_silver_resource,
+
+            "dbt_gold_rsc": dbt_gold_resource
+
         },
     )

@@ -1,0 +1,80 @@
+version: 2
+
+models:
+  - name: dimdate
+    description: "Date dimension"
+    columns:
+      - name: dateid
+        description: "Primary key for date records"
+        tests: [not_null, unique]
+      - name: date
+        description: "Date"
+        tests: [not_null, unique]
+      - name: dayofweekname
+        description: "Name of Day of the week"
+        tests: [not_null]
+      - name: dayofweek
+        description: "Day of week"
+        tests: [not_null]
+      - name: dayofmonth
+        description: "Day of the month"
+        tests: [not_null]
+      - name: dayofyear
+        description: "Day of the year"
+        tests: [not_null]
+      - name: weekofyear
+        description: "Week of the year"
+        tests: [not_null]
+      - name: monthofyear
+        description: "Month of the year"
+        tests: [not_null]        
+      - name: monthofyearname
+        description: "Month of the year name"
+        tests: [not_null]
+      - name: calendarquater
+        description: "Calendar quarter"
+        tests: [not_null]
+      - name: calendaryear
+        description: "Calendar year"
+        tests: [not_null]
+      - name: calendarsemester
+        description: "Calendar semester"
+        tests: [not_null]
+      - name: fiscalquater
+        description: "Fiscal quarter"
+        tests: [not_null]
+      - name: fiscalyear
+        description: "Fiscal year"
+        tests: [not_null]
+      - name: fiscalsemester
+        description: "Fiscal semester"
+        tests: [not_null]
+
+  - name: dimcustomer
+    description: "List of people who are customers not linked to a store"
+    columns:
+      - name: customerid
+        description: "Customers id"
+        tests: [not_null, unique]
+
+      - name: altcustomerid
+        description: "Unique ID of the person"
+        tests: [not_null, unique]
+
+      - name: persontype
+        description: "Type of person (Individual, Store, etc.)"
+
+      - name: title
+        description: "Title of the person (Mr, Ms, etc.)"
+
+      - name: firstname
+        description: "First name"
+
+      - name: middlename
+        description: "Middle name"
+
+      - name: lastname
+        description: "Last name"
+
+      - name: emailpromotion
+        description: "Email promotion flag"

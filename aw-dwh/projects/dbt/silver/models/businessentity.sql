@@ -1,5 +1,5 @@
 {{ config(materialized='table') }}
 
-select 
+select
     businessentityid
 from {{ source('bronze', 'core_businessentity') }}

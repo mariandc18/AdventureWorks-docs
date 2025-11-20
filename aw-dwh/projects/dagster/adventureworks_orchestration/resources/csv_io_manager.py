@@ -28,7 +28,10 @@ class PartitionedCsvIOManager(dg.ConfigurableIOManager):
 
         if isinstance(obj, DataFrame):
             row_count = obj.count()
-            obj.write.csv(path=path, mode="overwrite", header=True)
+            obj.write \
+                .option("escape", "^") \
+                .option("quoteEscape", "^") \
+                .csv(path=path, mode="overwrite", header=True)
         else:
             raise Exception(f"Outputs of type {type(obj)} not supported.")
 
@@ -39,7 +42,15 @@ class PartitionedCsvIOManager(dg.ConfigurableIOManager):
         path = self._get_path(context)
         if context.dagster_type.typing_type == DataFrame:
             # return pyspark dataframe
-            return self.pyspark.spark_session.read.csv(path, header=True, inferSchema=True)
+            return (self.pyspark.spark_session
+                    .read.format("csv")
+                    .option("header", "true")
+                    .option("inferSchema", "true")
+                    .option("multiLine", "true")
+                    .option("escape", "^")
+                    .option("quoteEscape", "^")
+                    .load(path)
+                )
 
         raise Exception(
             f"Inputs of type {context.dagster_type} not supported. Please specify a valid type "
