@@ -6,6 +6,7 @@ with dates as (
             interval '1' day
         ) as date_array
 ),
+
 expanded as (
     select 
         d as date_value
