@@ -1660,3 +1660,151 @@ models:
         description: "Fecha en que el artículo fue añadido al carrito."
         tests:
           - not_null
+
+  - name: silver_department
+    description: "Departamentos en la empresa."
+    columns:
+      - name: departmentid
+        description: "Primary key."
+        tests: [not_null, unique]
+      - name: name
+        description: "Department name"
+        tests: [not_null, unique]
+      - name: groupname
+        description: "Functional category"
+        tests: [not_null]
+
+  - name: silver_employeedepartmenthistory
+    description: "Historial de los empleados en un departamento."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            ["businessentityid", "departmentid", "startdate"]
+    columns:
+      - name: businessentityid
+        description: "Employee id"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('businessentity')
+              field: businessentityid
+      - name: departmentid
+        description: "Department ID"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_department')
+              field: departmentid
+      - name: shiftid
+        description: "Shift ID"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_shift')
+              field: shiftid
+      - name: startdate
+        description: "Date of start"
+        tests: [not_null]
+      - name: enddate
+        description: "Date of finish"
+
+  - name: silver_employeepayhistory
+    description: "Employee Pay History."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: ["businessentityid", "ratechangedate"]
+    columns:
+      - name: businessentityid
+        description: "Employee id"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('businessentity')
+              field: businessentityid
+      - name: ratechangedate
+        description: "Fecha en que se aplica el nuevo salario"
+        tests: [not_null]
+      - name: rate
+        description: "Monto del salario"
+        tests: [not_null]
+      - name: payfrequency
+        description: "Frecuencia de pago"
+        tests:
+          - not_null
+
+  - name: silver_shift
+    description: "Turnos de trabajo."
+    columns:
+      - name: shiftid
+        description: "Id del turno"
+        tests: [not_null, unique]
+      - name: name
+        description: "Nombre del turno"
+        tests:
+          - not_null
+      - name: starttime
+        description: "Hora de inicio"
+        tests: [not_null]
+      - name: endtime
+        description: "Hora de fin"
+        tests: [not_null]
+
+  - name: silver_reviews
+    description: "Reseñas realizadas por usuarios sobre productos en tiendas."
+    columns:
+      - name: id
+        description: "Identificador único de la reseña"
+        tests: [not_null, unique]
+      - name: userId
+        description: "Referencia al usuario que escribió la reseña"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_users')
+              field: id
+      - name: storeId
+        description: "Referencia a la tienda asociada a la reseña"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_stores')
+              field: id
+      - name: product
+        description: "Nombre del producto reseñado"
+        tests: [not_null]
+      - name: rating
+        description: "Calificación otorgada por el usuario"
+        tests:
+          - not_null
+      - name: date
+        description: "Fecha en que se realizó la reseña"
+        tests: [not_null]
+
+  - name: silver_users
+    description: "Usuarios que realizan reseñas."
+    columns:
+      - name: id
+        description: "Identificador único del usuario"
+        tests: [not_null, unique]
+      - name: firstName
+        description: "Nombre del usuario"
+        tests: [not_null]
+      - name: lastName
+        description: "Apellido del usuario"
+        tests: [not_null]
+      - name: email
+        description: "Correo electrónico del usuario"
+        tests: [not_null, unique]
+      - name: birthdate
+        description: "Fecha de nacimiento del usuario"
+        tests: [not_null]
+
+  - name: silver_stores
+    description: "Tiendas donde se realizan reseñas."
+    columns:
+      - name: id
+        description: "Identificador único de la tienda"
+        tests: [not_null, unique]
+      - name: name
+        description: "Nombre de la tienda"
+        tests: [not_null]
