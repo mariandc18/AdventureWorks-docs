@@ -1939,3 +1939,175 @@ sources:
           - name: modifieddate
             description: "Fecha de última modificación."
             tests: [not_null]
+
+      - name: hr_department
+        description: "Departamentos en la empresa."
+        columns:
+          - name: departmentid
+            description: "Primary key."
+            tests: [not_null, unique]
+          - name: name
+            description: "Department name"
+            tests: [not_null, unique]
+          - name: groupname
+            description: "Functional category"
+            tests: [not_null]
+          - name: modifieddate
+            description: Last modification date
+            tests: [not_null]
+
+      - name: hr_employeedepartmenthistory
+        description: "Historial de los empleados en un departamento"
+        columns:
+          - name: businessentityid
+            description: Employee id
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('bronze', 'core_businessentity')
+                    field: businessentityid
+          - name: departmentid
+            description: "Department ID"
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('bronze', 'hr_department')
+                    field: departmentid
+          - name: shiftid
+            description: "Shift ID"
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('bronze', 'hr_shift')
+                    field: shiftid
+          - name: startdate
+            description: "Date of start"
+          - name: enddate
+            description: "Date of finish"
+            tests: [not_null]
+          - name: modifieddate
+            description: "Last modification"
+            tests: [not_null]
+
+      - name: hr_employeepayhistory
+        description: "Employee Pay History"
+        columns:
+          - name: businessentityid
+            description: Employee id
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('bronze', 'core_businessentity')
+                    field: businessentityid
+          - name: ratechangedate
+            description: "Fecha en que se aplica el nuevo salario"
+            tests: [not_null]
+          - name: rate
+            description: "Monto del salario"
+            tests: [not_null]
+          - name: payfrequency
+            description: "Frecuencia de pago"
+            tests: [not_null]
+          - name: modifieddate
+            description: "Fecha de última modificación"
+            tests: [not_null]
+
+      - name: hr_shift
+        description: "Turnos de trabajo"
+        columns:
+          - name: shiftid
+            description: "Id del turno"
+            tests:
+              - not_null
+          - name: name
+            description: "Nombre del turno"
+            tests: [not_null]
+          - name: starttime
+            description: "Fecha de inicio"
+            tests: [not_null]
+          - name: endtime
+            description: "Fecha de culminación"
+            tests: [not_null]
+          - name: modifieddate
+            description: "Fecha de última modificación"
+            tests: [not_null]
+
+      - name: reviews_reviews
+        description: "Reseñas realizadas por usuarios sobre productos en tiendas"
+        columns:
+          - name: id
+            description: "Identificador único de la reseña"
+            tests:
+              - not_null
+              - unique
+          - name: userId
+            description: "Referencia al usuario que escribió la reseña"
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('bronze', 'reviews_users')
+                    field: id
+          - name: storeId
+            description: "Referencia a la tienda asociada a la reseña"
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('bronze', 'reviews_stores')
+                    field: id
+          - name: product
+            description: "Nombre del producto reseñado"
+            tests:
+              - not_null
+          - name: rating
+            description: "Calificación otorgada por el usuario"
+            tests:
+              - not_null
+          - name: date
+            description: "Fecha en que se realizó la reseña"
+            tests:
+              - not_null
+
+      - name: reviews_users
+        description: "Usuarios que realizan reseñas"
+        columns:
+          - name: id
+            description: "Identificador único del usuario"
+            tests:
+              - not_null
+              - unique
+          - name: firstName
+            description: "Nombre del usuario"
+            tests:
+              - not_null
+          - name: lastName
+            description: "Apellido del usuario"
+            tests:
+              - not_null
+          - name: email
+            description: "Correo electrónico del usuario"
+            tests:
+              - not_null
+              - unique
+          - name: birthdate
+            description: "Fecha de nacimiento del usuario"
+            tests:
+              - not_null
+
+      - name: reviews_stores
+        description: "Tiendas donde se realizan reseñas"
+        columns:
+          - name: id
+            description: "Identificador único de la tienda"
+            tests:
+              - not_null
+              - unique
+          - name: name
+            description: "Nombre de la tienda"
+            tests:
+              - not_null
