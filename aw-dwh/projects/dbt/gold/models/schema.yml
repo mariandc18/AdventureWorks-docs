@@ -27,7 +27,7 @@ models:
         tests: [not_null]
       - name: monthofyear
         description: "Month of the year"
-        tests: [not_null]        
+        tests: [not_null]
       - name: monthofyearname
         description: "Month of the year name"
         tests: [not_null]
@@ -60,7 +60,7 @@ models:
       - name: altproductid
         description: "Product id"
         tests: [not_null]
-      
+
       - name: name
         description: "Product name"
         tests: [not_null]
@@ -125,7 +125,6 @@ models:
 
       - name: discontinueddate
         description: "Date when product was discontinued"
-
 
   - name: dimpromotion
     description: "Promotion dimension"
@@ -222,7 +221,6 @@ models:
       - name: groupname
         description: "Sales group (renamed from reserved keyword 'group')"
 
-
   - name: dimsalesterritory
     description: "Address dimension table with city, postal code, state, territory, and country"
     columns:
@@ -233,7 +231,6 @@ models:
       - name: altsalesterritoryid
         description: "The id"
         tests: [not_null]
-
 
       - name: territory
         description: "Sales territory name"
@@ -247,19 +244,92 @@ models:
       - name: groupname
         description: "Sales group (renamed from reserved keyword 'group')"
 
+  - name: dimuser
+    description: "User dimension for reviews and personal information"
+    columns:
+      - name: userid
+        description: "The id"
+        tests: [not_null, unique]
+
+      - name: altuserid
+        description: "The id"
+        tests: [not_null]
+
+      - name: firstname
+        description: "User firstname"
+
+      - name: lastname
+        description: "User lastname"
+
+      - name: email
+        description: "User email"
+
+      - name: birthdate
+        description: "User birthdate"
+
+  - name: dimlocation
+    description: "Manufacturing location"
+    columns:
+      - name: locationid
+        description: "Manufacturing locationid"
+        tests: [not_null, unique]
+
+      - name: altlocationid
+        description: "Location id"
+        tests: [not_null]
+
+      - name: name
+        description: "Location name"
+
+      - name: costrate
+        description: "Location costrate"
+
+      - name: availabity
+        description: "Location availabity"
+
+  - name: dimscrapreason
+    description: "Scrapreason dimension"
+    columns:
+      - name: scrapreasonid
+        description: "Scrapreason id"
+        tests: [not_null, unique]
+
+      - name: altscrapreasonid
+        description: "Scrapreason id"
+        tests: [not_null]
+
+      - name: name
+        description: "Scrapreason"
+
+  - name: dimestorereviews
+    description: "Store of the review"
+    columns:
+      - name: storeid
+        description: "The store id"
+        tests: [not_null, unique]
+
+      - name: altstoreid
+        description: "The store id"
+        tests: [not_null]
+
+      - name: name
+        description: "Store name"
+
   - name: factonlinesale
     description: "Fact table for internet sales combining order, customer, product, promotion, geography, and dates."
     columns:
-
       - name: onlinesaleid
         tests: [not_null, unique]
-    
 
       - name: salesordernumber
         tests:
           - not_null
 
       - name: salesorderdetailid
+        tests:
+          - not_null
+
+      - name: specialofferid
         tests:
           - not_null
 
@@ -360,3 +430,447 @@ models:
       - name: totaltaxes
       - name: totalfreight
       - name: totalprofit
+
+  - name: factreviews
+    description: "Fact table containing product reviews. User and store IDs are kept as raw attributes because they do not map to any valid dimension."
+    columns:
+      - name: reviewid
+        description: "Surrogate key for the review."
+        tests:
+          - not_null
+          - unique
+
+      - name: altreviewid
+        description: "Original review ID from the source."
+
+      - name: userid
+        description: "Raw user ID from the source. Not linked to any dimension."
+
+      - name: storeid
+        description: "Raw store ID from the source (VendorID in AdventureWorks). Not linked to any dimension."
+
+      - name: dateid
+        description: "Foreign key to dimdate."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dimdate')
+              field: dateid
+
+      - name: product
+        description: "Product name from the source."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dimproduct')
+              field: name
+
+      - name: rating
+        description: "Numeric rating given in the review."
+
+  - name: factworkorder
+    description: "Fact table for manufacturing work orders combining product, location, scrap reason, and dates."
+    columns:
+      - name: workorderid
+        description: "Surrogate key for the work order fact."
+        tests: [not_null, unique]
+
+      - name: altworkorderid
+        description: "Original work order identifier from source system."
+        tests: [not_null]
+
+      - name: orderqty
+        description: "Quantity of product ordered."
+        tests: [not_null]
+
+      - name: scrappedqty
+        description: "Quantity of product scrapped during the work order."
+
+      - name: stockedqty
+        description: "Quantity of product stocked after completion of the work order."
+
+      - name: productid
+        description: "Foreign key to DimProduct representing the manufactured product."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dimproduct')
+                field: productid
+
+      - name: scrapreasonid
+        description: "Foreign key to DimScrapReason representing reason for scrapping."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dimscrapreason')
+                field: scrapreasonid
+
+      - name: startdateid
+        description: "Foreign key to DimDate representing the start date of the work order."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dimdate')
+                field: dateid
+
+      - name: enddateid
+        description: "Foreign key to DimDate representing the end date of the work order."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dimdate')
+                field: dateid
+
+      - name: duedateid
+        description: "Foreign key to DimDate representing the due date of the work order."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dimdate')
+                field: dateid
+
+      - name: is_late
+        description: "It indicate if the work order finished after its due date (1 = late, 0 = on time)."
+        tests: [not_null]
+
+  - name: factworkorderrouting
+    description: "Fact table for manufacturing work order routings combining product, location, operation sequence, resource hours, costs, and dates."
+    columns:
+      - name: workorderroutingid
+        description: "Surrogate key for the work order routing fact"
+        tests: [not_null, unique]
+
+      - name: workorderid
+        description: "Foreign key to FactWorkOrder representing the parent work order."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('factworkorder')
+                field: workorderid
+
+      - name: productid
+        description: "Foreign key to DimProduct representing the manufactured product."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dimproduct')
+                field: productid
+
+      - name: operationsequence
+        description: "Sequence number of the routing operation within the work order."
+        tests: [not_null]
+
+      - name: locationid
+        description: "Foreign key to DimLocation representing the manufacturing location."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dimlocation')
+                field: locationid
+
+      - name: scheduledstartdateid
+        description: "Foreign key to DimDate representing the scheduled start date."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dimdate')
+                field: dateid
+
+      - name: scheduledenddateid
+        description: "Foreign key to DimDate representing the scheduled end date."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dimdate')
+                field: dateid
+
+      - name: actualstartdateid
+        description: "Foreign key to DimDate representing the actual start date."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dimdate')
+                field: dateid
+
+      - name: actualenddateid
+        description: "Foreign key to DimDate representing the actual end date."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dimdate')
+                field: dateid
+
+      - name: actualresourcehrs
+        description: "Actual resource hours consumed in the routing operation."
+
+      - name: plannedcost
+        description: "Planned cost of the routing operation."
+
+      - name: actualcost
+        description: "Actual cost incurred in the routing operation."
+
+  - name: review_report
+    description: "Aggregated report of product reviews by date, product, and storeid (treated as a raw attribute)."
+    columns:
+      - name: date
+        description: "Calendar date of the review."
+
+      - name: storeid
+        description: "Raw store identifier."
+
+      - name: category
+        description: "Product category."
+
+      - name: subcategory
+        description: "Product subcategory."
+
+      - name: productname
+        description: "Product name."
+
+      - name: avg_rating
+        description: "Average rating for the product on that date."
+
+      - name: total_reviews
+        description: "Total number of reviews for that product on that date."
+
+  - name: workorderreport
+    description: "Report table for work order analysis by year and product"
+    columns:
+      - name: workorderid
+        description: "Surrogate key for work order"
+        tests:
+          - unique
+          - not_null
+
+      - name: altworkorderid
+        description: "Alternative work order ID from source system"
+
+      - name: productid
+        description: "Foreign key to DimProduct"
+        tests:
+          - relationships:
+              to: ref('dimproduct')
+              field: productid
+
+      - name: product_name
+        description: "Product name from DimProduct"
+
+      - name: scrapreasonid
+        description: "Foreign key to DimScrapReason"
+
+      - name: scrapreason_name
+        description: "Scrap reason description"
+
+      - name: duedate
+        description: "Due date of the work order"
+        tests:
+          - not_null
+
+      - name: orderqty
+        description: "Quantity ordered"
+
+      - name: scrappedqty
+        description: "Quantity scrapped"
+
+      - name: stockedqty
+        description: "Quantity stocked"
+
+      - name: scrapcost
+        description: "Cost of scrapped quantity (scrappedqty * standardcost)"
+
+      - name: scrap_rate
+        description: "Percentage of ordered quantity that was scrapped"
+
+      - name: yield_rate
+        description: "Percentage of ordered quantity that reached stock"
+
+      - name: is_late
+        description: "1 if order was late, 0 if on-time"
+
+      - name: total_actualcost
+        description: "Sum of actual costs from work order routing"
+
+      - name: total_plannedcost
+        description: "Sum of planned costs from work order routing"
+
+      - name: total_actualhrs
+        description: "Sum of actual resource hours from work order routing"
+
+      - name: avg_delay
+        description: "Average delay in days between scheduled and actual end date"
+
+      - name: cost_efficiency
+        description: "Ratio of planned cost to actual cost (higher is better)"
+
+      - name: hrs_efficiency
+        description: "Ratio of planned cost to actual resource hours"
+
+  - name: operationsreport
+    description: "Operations analysis by location, product, and date for quality control assessment"
+    columns:
+      - name: operationsequence
+        description: "Sequence number of the operation in the work order routing"
+        tests:
+          - not_null
+
+      - name: operation_date
+        description: "Due date of the work order operation"
+        tests:
+          - not_null
+
+      - name: location_name
+        description: "Name of the location/line where the operation is performed"
+        tests:
+          - not_null
+
+      - name: product_name
+        description: "Name of the product being processed"
+
+      - name: total_orders
+        description: "Total count of distinct work orders"
+        tests:
+          - not_null
+
+      - name: orders_with_defects
+        description: "Count of work orders with defects (scrapped qty > 0)"
+
+      - name: late_orders
+        description: "Count of orders that were delivered late"
+
+      - name: total_planned_cost
+        description: "Sum of planned costs for all work orders"
+
+      - name: total_actual_cost
+        description: "Sum of actual costs for all work orders"
+
+  - name: promotionreport
+    columns:
+      - name: productid
+        description: Identificador surrogate del producto.
+        tests:
+          - not_null
+
+      - name: productname
+        description: Nombre del producto.
+
+      - name: category
+        description: Categoría del producto.
+
+      - name: subcategory
+        description: Subcategoría del producto.
+
+      - name: promotionid
+        description: Identificador surrogate de la promoción aplicada.
+        tests:
+          - not_null
+
+      - name: promotion_description
+        description: Descripción de la promoción.
+
+      - name: discountpct
+        description: Porcentaje de descuento aplicado en la promoción.
+
+      - name: promotion_type
+        description: Tipo de promoción.
+
+      - name: promo_category
+        description: Categoría de la promoción.
+
+      - name: startdate
+        description: Fecha de inicio de la promoción.
+
+      - name: enddate
+        description: Fecha de fin de la promoción.
+
+      - name: minqty
+        description: Cantidad mínima requerida para aplicar la promoción.
+
+      - name: maxqty
+        description: Cantidad máxima permitida en la promoción.
+
+      - name: total_sales
+        description: Ventas totales del producto durante la promoción.
+
+      - name: total_cost
+        description: Costos totales asociados al producto durante la promoción.
+
+      - name: total_margin
+        description: Margen total (ventas - costos).
+
+      - name: margin_with_promo
+        description: Margen obtenido en ventas con promoción.
+
+      - name: margin_without_promo
+        description: Margen obtenido en ventas sin promoción.
+
+      - name: times_promoted
+        description: Número de veces que el producto fue promovido.
+
+      - name: sales_with_promo
+        description: Ventas monetarias realizadas con promoción.
+
+      - name: sales_without_promo
+        description: Ventas monetarias realizadas sin promoción.
+
+      - name: units_cancelled
+        description: Unidades canceladas (status = 6 en AdventureWorks).
+
+      - name: promo_duration_days
+        description: Duración de la promoción en días (enddate - startdate).
+
+  - name: salesreportglobal
+    description: "Aggregated sales report including online and offline orders, product details, geography, and territory."
+    columns:
+      - name: date
+        description: "Calendar date of the order."
+
+      - name: productid
+        description: "Unique identifier of the product."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dimproduct')
+              field: productid
+
+      - name: productname
+        description: "Name of the product from dimproduct."
+
+      - name: category
+        description: "Product category."
+
+      - name: subcategory
+        description: "Product subcategory."
+
+      - name: countrycode
+        description: "ISO country code of the billing geography."
+
+      - name: countryname
+        description: "Country name of the billing geography."
+
+      - name: groupname
+        description: "Sales territory group name."
+
+      - name: isonline
+        description: "Flag indicating whether the order was placed online (true) or offline (false)."
+
+      - name: totalunits
+        description: "Total units sold for the product in the given group/date."
+
+      - name: totalcost
+        description: "Total cost amount for the product in the given group/date."
+
+      - name: totalsales
+        description: "Total sales amount for the product in the given group/date."
+
+      - name: totaltaxes
+        description: "Total tax amount for the product in the given group/date."
+
+      - name: totalfreight
+        description: "Total freight charges for the product in the given group/date."
+
+      - name: totalprofit
+        description: "Total profit calculated as sales minus cost."
