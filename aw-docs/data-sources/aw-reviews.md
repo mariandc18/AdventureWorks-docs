@@ -10,7 +10,31 @@ La API que gestiona reseñas de productos realizadas por usuarios en tiendas esp
 
 ## Modelo lógico
 
-![Modelo lógico de API](./imgs/API_model.drawio.png)
+```mermaid
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
+erDiagram
+    USERS ||--o{ REVIEWS : ""
+    STORES ||--o{ REVIEWS : ""
+    USERS {
+        int id PK
+        string firstName
+        string lastName
+        string email
+        date birthdate
+    }
+    REVIEWS {
+        int id PK
+        int userid FK
+        int storeid FK
+        string product
+        int rating
+        date date
+    }
+    STORES {
+        int id PK
+        string name
+    }
+```
 
 ## Catálogo de datos
 
