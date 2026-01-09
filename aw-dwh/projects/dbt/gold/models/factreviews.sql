@@ -1,34 +1,32 @@
-{ { config(materialized = 'table') } } with sr as (
-    select *
-    from { { ref('dimstorereviews') } }
-),
-usr as (
-    select *
-    from { { ref('dimuser') } }
-),
-dd as (
-    select dateid,
+{{ config(materialized = 'table') }}
+
+with dd as (
+    select 
+        dateid,
         date
-    from { { ref('dimdate') } }
+    from {{ ref('dimdate') }}
 ),
+
 reviews as (
-    select { { dbt_utils.generate_surrogate_key(["id"]) } } as reviewid,
+    select 
+        {{ dbt_utils.generate_surrogate_key(["id"]) }} as reviewid,
         id as altreviewid,
-        userId,
-        storeId,
+        userid,   
+        storeid,     
         product,
         rating,
         date
-    from { { source('silver', 'silver_reviews') } }
+    from {{ source('silver', 'silver_reviews') }}
 )
-select r.reviewid,
+
+select 
+    r.reviewid,
     r.altreviewid,
-    u.userid,
-    s.storeid,
+    r.userid,
+    r.storeid,
     d.dateid,
     r.product,
     r.rating
 from reviews r
-    inner join usr u on r.userId = u.altuserid
-    inner join sr s on r.storeId = s.altstoreid
-    inner join dd d on r.date = d.date
+left join dd d 
+    on r.date = d.date
