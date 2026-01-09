@@ -20,3 +20,8 @@ sources:
       - name: salesorderheader
       - name: salesorderdetail
       - name: shipmethod
+      - name: silver_reviews
+      - name: location
+      - name: scrapreason
+      - name: workorder
+      - name: workorderrouting
