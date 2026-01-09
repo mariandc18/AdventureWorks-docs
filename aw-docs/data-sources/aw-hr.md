@@ -10,6 +10,46 @@ Los archivos referentes a los recursos humanos de la empresa, muestran las asign
 
 ## Modelo lógico
 
+```mermaid
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
+erDiagram
+    DEPARTMENT ||--o{ EMPLOYEEDEPARTMENTHISTORY : ""
+    SHIFT ||--o{ EMPLOYEEDEPARTMENTHISTORY : ""
+    EMPLOYEEDEPARTMENTHISTORY ||--o{ EMPLOYEEPAYHISTORY : ""
+
+    DEPARTMENT {
+        smallint DepartmentId PK
+        nvarchar Name
+        nvarchar GroupName
+        datetime ModifiedDate
+    }
+
+    SHIFT {
+        tinyint ShiftId PK
+        nvarchar Name
+        time StartTime
+        time EndTime
+        datetime ModifiedDate
+    }
+
+    EMPLOYEEDEPARTMENTHISTORY {
+        int BusinessEntityId FK
+        smallint DepartmentId FK
+        tinyint ShiftId FK
+        date StartDate
+        date EndDate
+        datetime ModifiedDate
+    }
+
+    EMPLOYEEPAYHISTORY {
+        int BusinessEntityId FK
+        date RateChangeDate PK
+        money Rate
+        tinyint PayFrequency
+        datetime ModifiedDate
+    }
+```
+
 ## Catálogo de datos
 
 ### Department
